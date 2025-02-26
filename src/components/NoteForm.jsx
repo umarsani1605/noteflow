@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from './Button';
-import PencilIcon from '../assets/pencil.svg';
+import PencilIcon from '../assets/pencil-subtle.svg';
 import CloseIcon from '../assets/close.svg';
 
 function NoteForm({ onAddNote, ...props }) {

@@ -2,7 +2,7 @@ import React from 'react';
 
 function Footer() {
   return (
-    <div className="flex justify-center max-w-[1080px] mx-auto p-4 border-t border-slate-200">
+    <div className="flex justify-center mx-auto p-4">
       <p className="text-sm text-slate-600">Dicoding React Course Submission. Made with 💙 by Umar Sani.</p>
     </div>
   );

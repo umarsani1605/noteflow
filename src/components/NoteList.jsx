@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import NoteItem from './NoteItem';
 import ChevronDown from '../assets/chevron-down.svg';
 import ChevronUp from '../assets/chevron-up.svg';
@@ -26,7 +27,7 @@ function NoteList({ title, notes, collapsible = false, onDelete, onArchive, ...p
         className={`transition-all duration-300
         ${collapsible && isCollapsed ? 'h-0 opacity-0 overflow-hidden' : 'h-auto opacity-100'}`}
       >
-        {notes.length > 0 ? (
+        {notes.length ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {notes.map((note) => (
               <NoteItem key={note.id} note={note} onDelete={onDelete} onArchive={onArchive} {...props} />
