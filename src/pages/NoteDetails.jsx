@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 
 import { getNote, deleteNote, archiveNote, unarchiveNote, editNote } from '../utils/local-data';
-import ArrowLeft from '../assets/arrow-left.svg';
-import Pencil from '../assets/pencil.svg';
-import Trash from '../assets/trash.svg';
-import ArchiveIcon from '../assets/archive-arrow-down.svg';
-import UnarchiveIcon from '../assets/archive-x-mark.svg';
+import ArrowLeftIcon from '../assets/icons/arrow-left.svg';
+import TrashIcon from '../assets/icons/trash.svg';
+import ArchiveIcon from '../assets/icons/archive-arrow-down.svg';
+import UnarchiveIcon from '../assets/icons/archive-x-mark.svg';
 import { showFormattedDate } from '../utils';
 
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
-import Button from '../components/Button';
+import Button from '../components/common/Button';
 
 function NoteDetails() {
   const { id } = useParams();
@@ -21,9 +20,15 @@ function NoteDetails() {
 
   const noteDetail = getNote(id);
 
+  if (!noteDetail) {
+    throw new Response('Note not found', { status: 404 });
+  }
+
   const [note, setNote] = useState({
     title: noteDetail.title,
     body: noteDetail.body,
+    archived: noteDetail.archived,
+    createdAt: noteDetail.createdAt,
   });
 
   const handleChange = (e) => {
@@ -44,14 +49,20 @@ function NoteDetails() {
       id: noteDetail.id,
       title: note.title,
       body: note.body,
+      archived: note.archived,
+      createdAt: Date.now(),
     });
 
-    navigate('/');
+    navigate(-1);
+  };
+
+  const handleBackButton = () => {
+    navigate(-1);
   };
 
   const handleDelete = () => {
     deleteNote(id);
-    navigate('/');
+    navigate(-1);
   };
 
   const handleArchiveToggle = () => {
@@ -60,27 +71,24 @@ function NoteDetails() {
     } else {
       archiveNote(id);
     }
-    navigate('/');
+    navigate(-1);
   };
 
   return (
     <div className="bg-slate-50 h-screen flex flex-col justify-between">
       <Header showSearchBar={false} />
       <div className="w-[1080px] mx-auto p-4 pb-8 flex flex-col gap-2 flex-1">
-        <div className="flex justify-between items-center px-2">
-          <Link to="/" className="flex items-center gap-2 cursor-pointer hover:bg-slate-200 rounded-lg px-4 py-2">
-            <img src={ArrowLeft} alt="" className="w-4" />
-            <div className="text-slate-700">Kembali</div>
-          </Link>
+        <div className="flex justify-between items-center">
+          <Button variant="secondary" icon={ArrowLeftIcon} onClick={handleBackButton}>
+            Kembali
+          </Button>
           <div className="flex gap-1">
-            <button className="rounded-lg px-4 py-2 text-sm flex items-center gap-1 hover:bg-slate-200" onClick={handleDelete}>
-              <img src={Trash} className="w-5" alt="" />
+            <Button variant="secondary" icon={TrashIcon} onClick={handleDelete}>
               Hapus
-            </button>
-            <button className="rounded-lg px-4 py-2 text-sm flex items-center gap-1 hover:bg-slate-200" onClick={handleArchiveToggle}>
-              <img src={noteDetail.archived ? UnarchiveIcon : ArchiveIcon} className="w-5" alt="" />
+            </Button>
+            <Button variant="secondary" icon={noteDetail.archived ? UnarchiveIcon : ArchiveIcon} onClick={handleArchiveToggle}>
               {noteDetail.archived ? 'Kembalikan' : 'Arsipkan'}
-            </button>
+            </Button>
           </div>
         </div>
         <form className="flex flex-col justify-between rounded-lg bg-white p-8 border border-slate-200 flex-1" onSubmit={handleSubmit}>

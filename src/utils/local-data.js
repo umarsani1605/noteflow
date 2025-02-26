@@ -11,14 +11,14 @@ let notes = [
     title: 'Functional Component',
     body: 'Functional component merupakan React component yang dibuat menggunakan fungsi JavaScript. Agar fungsi JavaScript dapat disebut component ia harus mengembalikan React element dan dipanggil layaknya React component.',
     createdAt: '2022-04-14T04:27:34.572Z',
-    archived: false,
+    archived: true,
   },
   {
     id: 'notes-3',
     title: 'Modularization',
     body: 'Dalam konteks pemrograman JavaScript, modularization merupakan teknik dalam memecah atau menggunakan kode dalam berkas JavaScript secara terpisah berdasarkan tanggung jawabnya masing-masing.',
     createdAt: '2022-04-14T04:27:34.572Z',
-    archived: false,
+    archived: true,
   },
   {
     id: 'notes-4',
@@ -98,10 +98,12 @@ function unarchiveNote(id) {
   });
 }
 
-function editNote({ id, title, body }) {
+function editNote({ id, title, body, archived, createdAt }) {
   const noteToEdit = notes.find((note) => note.id === id);
   noteToEdit.title = title;
   noteToEdit.body = body;
+  noteToEdit.archived = archived;
+  noteToEdit.createdAt = createdAt;
 
   notes = notes.map((note) => {
     if (note.id === id) {

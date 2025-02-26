@@ -1,26 +1,29 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
 import { showFormattedDate } from '../utils';
 
-import Trash from '../assets/trash.svg';
-import ArchiveIcon from '../assets/archive-arrow-down.svg';
-import UnarchiveIcon from '../assets/archive-x-mark.svg';
+import Trash from '../assets/icons/trash.svg';
+import ArchiveIcon from '../assets/icons/archive-arrow-down.svg';
+import UnarchiveIcon from '../assets/icons/archive-x-mark.svg';
 
-function NoteItem({ note, onDelete, onArchive, ...props }) {
+function NoteItem({ note, onDelete, onArchive }) {
   const handleDelete = (e) => {
     e.preventDefault();
     e.stopPropagation();
     onDelete(note.id);
   };
+
   const handleArchive = (e) => {
     e.preventDefault();
     e.stopPropagation();
     onArchive(note.id);
   };
+
   return (
     <Link
-      to={`/${note.id}`}
+      to={`/note/${note.id}`}
       className="group flex flex-col justify-between cursor-pointer bg-white p-4 rounded-lg hover:outline-[#007DFC] outline outline-slate-200 overflow-hidden"
     >
       <div className="space-y-2 text-sm text-slate-700">
@@ -49,5 +52,17 @@ function NoteItem({ note, onDelete, onArchive, ...props }) {
     </Link>
   );
 }
+
+NoteItem.propTypes = {
+  note: PropTypes.shape({
+    id: PropTypes.string,
+    title: PropTypes.string,
+    body: PropTypes.string,
+    archived: PropTypes.bool,
+    createdAt: PropTypes.string,
+  }).isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onArchive: PropTypes.func.isRequired,
+};
 
 export default NoteItem;

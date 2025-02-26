@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import Button from './Button';
-import PencilIcon from '../assets/pencil-subtle.svg';
-import CloseIcon from '../assets/close.svg';
+import PropTypes from 'prop-types';
+import Button from './common/Button';
+import PencilIcon from '../assets/icons/pencil-subtle.svg';
+import CloseIcon from '../assets/icons/close.svg';
 
-function NoteForm({ onAddNote, ...props }) {
+function NoteForm({ onAddNote }) {
   const TITLE_CHAR_LIMIT = 50;
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -96,5 +97,9 @@ function NoteForm({ onAddNote, ...props }) {
     </>
   );
 }
+
+NoteForm.propTypes = {
+  onAddNote: PropTypes.func.isRequired,
+};
 
 export default NoteForm;

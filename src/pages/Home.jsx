@@ -1,4 +1,5 @@
-import { React, useState } from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router';
 
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
@@ -7,8 +8,8 @@ import NoteForm from '../components/NoteForm';
 
 import { getAllNotes, addNote, deleteNote, archiveNote, unarchiveNote } from '../utils/local-data';
 
-function App() {
-  const [notes, setNotes] = useState(getAllNotes());
+function Home() {
+  const [notes, setNotes] = useState(getAllNotes);
   const [search, setSearch] = useState('');
 
   const filteredNotes = notes.filter((note) => {
@@ -51,7 +52,10 @@ function App() {
         <div className="w-[1080px] mx-auto p-4 flex flex-col gap-4">
           <NoteForm onAddNote={onAddNote} />
           <NoteList title="Daftar Catatan" notes={activeNotes} onDelete={onDeleteNote} onArchive={(id) => onArchiveNote(id, false)} />
-          <NoteList title="Diarsipkan" notes={archivedNotes} onDelete={onDeleteNote} onArchive={(id) => onArchiveNote(id, true)} collapsible={true} />
+          <Link to="archive" className="flex items-center gap-2 rounded-lg hover:underline mt-4">
+            <span className="font-bold text-lg text-slate-700 ">Diarsipkan</span>
+            <span className="text-sm text-slate-500">{archivedNotes.length > 0 && `(${archivedNotes.length})`}</span>
+          </Link>
         </div>
       </div>
       <Footer />
@@ -59,4 +63,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;

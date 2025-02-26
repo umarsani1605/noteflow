@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import NoteItem from './NoteItem';
-import ChevronDown from '../assets/chevron-down.svg';
-import ChevronUp from '../assets/chevron-up.svg';
+import ChevronDown from '../assets/icons/chevron-down.svg';
+import ChevronUp from '../assets/icons/chevron-up.svg';
 
 function NoteList({ title, notes, collapsible = false, onDelete, onArchive, ...props }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -40,5 +41,13 @@ function NoteList({ title, notes, collapsible = false, onDelete, onArchive, ...p
     </div>
   );
 }
+
+NoteList.propTypes = {
+  title: PropTypes.string.isRequired,
+  notes: PropTypes.array.isRequired,
+  collapsible: PropTypes.bool,
+  onDelete: PropTypes.func.isRequired,
+  onArchive: PropTypes.func.isRequired,
+};
 
 export default NoteList;
