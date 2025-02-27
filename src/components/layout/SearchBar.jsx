@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useSearchParams } from 'react-router';
+import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
 
-import SearchIcon from '../../assets/icons/search.svg';
+import SearchIcon from "../../assets/icons/search.svg";
 
 function SearchBar({ onSearch }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [query, setQuery] = useState(searchParams.get('keyword') || '');
+  const [query, setQuery] = useState(searchParams.get("keyword") || "");
 
   useEffect(() => {
-    if (searchParams.get('keyword')) {
-      onSearch(searchParams.get('keyword'));
+    if (searchParams.get("keyword")) {
+      onSearch(searchParams.get("keyword"));
     }
   }, []);
 
@@ -33,7 +33,13 @@ function SearchBar({ onSearch }) {
       onSubmit={(e) => e.preventDefault()}
     >
       <img src={SearchIcon} alt="search-icon" className="w-5" />
-      <input type="search" placeholder="Cari catatan" className="bg-transparent focus:outline-none w-full" value={query} onChange={handleChange} />
+      <input
+        type="search"
+        placeholder="Cari catatan"
+        className="bg-transparent focus:outline-none w-full"
+        value={query}
+        onChange={handleChange}
+      />
     </form>
   );
 }

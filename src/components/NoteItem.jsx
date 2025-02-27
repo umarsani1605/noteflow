@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import PropTypes from "prop-types";
+import React from "react";
+import { Link } from "react-router";
 
-import { showFormattedDate } from '../utils';
+import { showFormattedDate } from "../utils";
 
-import Trash from '../assets/icons/trash.svg';
-import ArchiveIcon from '../assets/icons/archive-arrow-down.svg';
-import UnarchiveIcon from '../assets/icons/archive-x-mark.svg';
+import ArchiveIcon from "../assets/icons/archive-arrow-down.svg";
+import UnarchiveIcon from "../assets/icons/archive-x-mark.svg";
+import Trash from "../assets/icons/trash.svg";
 
 function NoteItem({ note, onDelete, onArchive }) {
   const handleDelete = (e) => {
@@ -45,7 +45,11 @@ function NoteItem({ note, onDelete, onArchive }) {
             className="group-hover:opacity-100 opacity-0 transition-opacity duration-300 rounded-lg p-2 hover:bg-blue-50 cursor-pointer"
             onClick={handleArchive}
           >
-            <img src={note.archived ? UnarchiveIcon : ArchiveIcon} alt="archive-icon" className="w-4" />
+            <img
+              src={note.archived ? UnarchiveIcon : ArchiveIcon}
+              alt="archive-icon"
+              className="w-4"
+            />
           </button>
         </div>
       </div>

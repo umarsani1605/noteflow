@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import Button from './common/Button';
-import PencilIcon from '../assets/icons/pencil-subtle.svg';
-import CloseIcon from '../assets/icons/close.svg';
+import PropTypes from "prop-types";
+import React, { useState } from "react";
+import CloseIcon from "../assets/icons/close.svg";
+import PencilIcon from "../assets/icons/pencil-subtle.svg";
+import Button from "./common/Button";
 
 function NoteForm({ onAddNote }) {
   const TITLE_CHAR_LIMIT = 50;
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [note, setNote] = useState({
-    title: '',
-    body: '',
+    title: "",
+    body: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'title' && value.length > TITLE_CHAR_LIMIT) {
+    if (name === "title" && value.length > TITLE_CHAR_LIMIT) {
       return;
     }
     setNote({
@@ -37,18 +37,18 @@ function NoteForm({ onAddNote }) {
       createdAt: new Date().toISOString(),
     });
 
-    setNote({ title: '', body: '' });
+    setNote({ title: "", body: "" });
     setIsExpanded(false);
   };
 
   const handleOpen = (e) => {
-    console.log('Buka');
+    console.log("Buka");
     e.preventDefault();
     setIsExpanded(true);
   };
 
   const handleClose = (e) => {
-    console.log('Tutup');
+    console.log("Tutup");
     e.preventDefault();
     setIsExpanded(false);
   };
@@ -60,14 +60,16 @@ function NoteForm({ onAddNote }) {
           <div className="flex justify-between items-center">
             <input
               type="text"
-              placeholder={isExpanded ? 'Judul catatan' : 'Tulis catatan...'}
+              placeholder={isExpanded ? "Judul catatan" : "Tulis catatan..."}
               name="title"
               className="font-medium text-md text-slate-600 focus:outline-none w-full"
               value={note.title}
               onChange={handleChange}
               onFocus={handleOpen}
             />
-            {isExpanded && <span className="text-xs text-slate-500 mr-4">{`${remainingTitleChars}/${TITLE_CHAR_LIMIT}`}</span>}
+            {isExpanded && (
+              <span className="text-xs text-slate-500 mr-4">{`${remainingTitleChars}/${TITLE_CHAR_LIMIT}`}</span>
+            )}
             <img
               src={isExpanded ? CloseIcon : PencilIcon}
               alt="edit-icon"
@@ -76,7 +78,13 @@ function NoteForm({ onAddNote }) {
             />
           </div>
 
-          <div className={`space-y-4 transition-all duration-300 ${isExpanded ? 'opacity-100 h-auto' : 'opacity-0 h-0 overflow-hidden'}`}>
+          <div
+            className={`space-y-4 transition-all duration-300 ${
+              isExpanded
+                ? "opacity-100 h-auto"
+                : "opacity-0 h-0 overflow-hidden"
+            }`}
+          >
             <textarea
               id="body"
               placeholder="Tulis catatan..."

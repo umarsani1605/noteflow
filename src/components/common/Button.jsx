@@ -1,10 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import React from "react";
 
-function Button({ variant = 'primary', icon, onClick, children, ...props }) {
+function Button({ variant = "primary", icon, onClick, children, ...props }) {
   const variantStyles = {
-    primary: 'bg-[#007afc] text-white hover:bg-[#0053e0]',
-    secondary: 'bg-transparent text-slate-700 hover:bg-slate-200',
+    primary: "bg-[#007afc] text-white hover:bg-[#0053e0]",
+    secondary: "bg-transparent text-slate-700 hover:bg-slate-200",
   };
 
   return (
@@ -20,7 +20,7 @@ function Button({ variant = 'primary', icon, onClick, children, ...props }) {
 }
 
 Button.propTypes = {
-  variant: PropTypes.oneOf(['primary', 'secondary']),
+  variant: PropTypes.oneOf(["primary", "secondary"]),
   icon: PropTypes.string,
   onClick: PropTypes.func,
   children: PropTypes.node,

@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router';
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router";
 
-import { getNote, deleteNote, archiveNote, unarchiveNote, editNote } from '../utils/local-data';
-import ArrowLeftIcon from '../assets/icons/arrow-left.svg';
-import TrashIcon from '../assets/icons/trash.svg';
-import ArchiveIcon from '../assets/icons/archive-arrow-down.svg';
-import UnarchiveIcon from '../assets/icons/archive-x-mark.svg';
-import { showFormattedDate } from '../utils';
+import ArchiveIcon from "../assets/icons/archive-arrow-down.svg";
+import UnarchiveIcon from "../assets/icons/archive-x-mark.svg";
+import ArrowLeftIcon from "../assets/icons/arrow-left.svg";
+import TrashIcon from "../assets/icons/trash.svg";
+import { showFormattedDate } from "../utils";
+import {
+  archiveNote,
+  deleteNote,
+  editNote,
+  getNote,
+  unarchiveNote,
+} from "../utils/local-data";
 
-import Header from '../components/layout/Header';
-import Footer from '../components/layout/Footer';
-import Button from '../components/common/Button';
+import Button from "../components/common/Button";
+import Footer from "../components/layout/Footer";
+import Header from "../components/layout/Header";
 
 function NoteDetails() {
   const { id } = useParams();
@@ -21,7 +27,7 @@ function NoteDetails() {
   const noteDetail = getNote(id);
 
   if (!noteDetail) {
-    throw new Response('Note not found', { status: 404 });
+    throw new Response("Note tidak ditemukan", { status: 404 });
   }
 
   const [note, setNote] = useState({
@@ -33,7 +39,7 @@ function NoteDetails() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'title' && value.length > TITLE_CHAR_LIMIT) {
+    if (name === "title" && value.length > TITLE_CHAR_LIMIT) {
       return;
     }
     setNote({
@@ -79,19 +85,30 @@ function NoteDetails() {
       <Header showSearchBar={false} />
       <div className="w-[1080px] mx-auto p-4 pb-8 flex flex-col gap-2 flex-1">
         <div className="flex justify-between items-center">
-          <Button variant="secondary" icon={ArrowLeftIcon} onClick={handleBackButton}>
+          <Button
+            variant="secondary"
+            icon={ArrowLeftIcon}
+            onClick={handleBackButton}
+          >
             Kembali
           </Button>
           <div className="flex gap-1">
             <Button variant="secondary" icon={TrashIcon} onClick={handleDelete}>
               Hapus
             </Button>
-            <Button variant="secondary" icon={noteDetail.archived ? UnarchiveIcon : ArchiveIcon} onClick={handleArchiveToggle}>
-              {noteDetail.archived ? 'Kembalikan' : 'Arsipkan'}
+            <Button
+              variant="secondary"
+              icon={noteDetail.archived ? UnarchiveIcon : ArchiveIcon}
+              onClick={handleArchiveToggle}
+            >
+              {noteDetail.archived ? "Batal Arsipkan" : "Arsipkan"}
             </Button>
           </div>
         </div>
-        <form className="flex flex-col justify-between rounded-lg bg-white p-8 border border-slate-200 flex-1" onSubmit={handleSubmit}>
+        <form
+          className="flex flex-col justify-between rounded-lg bg-white p-8 border border-slate-200 flex-1"
+          onSubmit={handleSubmit}
+        >
           <div className="flex flex-col h-full pb-2">
             <input
               type="text"
@@ -102,7 +119,8 @@ function NoteDetails() {
               onChange={handleChange}
             />
             <p className="font-normal text-sm text-slate-500 pt-2 pb-6 cursor-default">
-              {showFormattedDate(noteDetail.createdAt)} {noteDetail.archived ? ' • Pesan dalam arsip' : ''}
+              {showFormattedDate(noteDetail.createdAt)}{" "}
+              {noteDetail.archived ? " • Pesan dalam arsip" : ""}
             </p>
             <textarea
               id="body"

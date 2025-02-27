@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router';
+import React, { useState } from "react";
+import { Link } from "react-router";
 
-import Header from '../components/layout/Header';
-import Footer from '../components/layout/Footer';
-import NoteList from '../components/NoteList';
-import NoteForm from '../components/NoteForm';
+import Footer from "../components/layout/Footer";
+import Header from "../components/layout/Header";
+import NoteForm from "../components/NoteForm";
+import NoteList from "../components/NoteList";
 
-import { getAllNotes, addNote, deleteNote, archiveNote, unarchiveNote } from '../utils/local-data';
+import {
+  addNote,
+  archiveNote,
+  deleteNote,
+  getAllNotes,
+  unarchiveNote,
+} from "../utils/local-data";
 
 function Home() {
   const [notes, setNotes] = useState(getAllNotes);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const filteredNotes = notes.filter((note) => {
     const query = search.toLowerCase();
@@ -51,10 +57,22 @@ function Home() {
         <Header onSearch={onSearchNote} />
         <div className="w-[1080px] mx-auto p-4 flex flex-col gap-4">
           <NoteForm onAddNote={onAddNote} />
-          <NoteList title="Daftar Catatan" notes={activeNotes} onDelete={onDeleteNote} onArchive={(id) => onArchiveNote(id, false)} />
-          <Link to="archive" className="flex items-center gap-2 rounded-lg hover:underline mt-4">
-            <span className="font-bold text-lg text-slate-700 ">Diarsipkan</span>
-            <span className="text-sm text-slate-500">{archivedNotes.length > 0 && `(${archivedNotes.length})`}</span>
+          <NoteList
+            title="Daftar Catatan"
+            notes={activeNotes}
+            onDelete={onDeleteNote}
+            onArchive={(id) => onArchiveNote(id, false)}
+          />
+          <Link
+            to="archive"
+            className="flex items-center gap-2 rounded-lg hover:underline mt-4"
+          >
+            <span className="font-bold text-lg text-slate-700 ">
+              Diarsipkan
+            </span>
+            <span className="text-sm text-slate-500">
+              {archivedNotes.length > 0 && `(${archivedNotes.length})`}
+            </span>
           </Link>
         </div>
       </div>

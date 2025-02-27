@@ -113,4 +113,4 @@ function editNote({ id, title, body, archived, createdAt }) {
   });
 }
 
-export { getAllNotes, getActiveNotes, getArchivedNotes, deleteNote, editNote, getNote, archiveNote, unarchiveNote, addNote };
+export { addNote, archiveNote, deleteNote, editNote, getActiveNotes, getAllNotes, getArchivedNotes, getNote, unarchiveNote };
