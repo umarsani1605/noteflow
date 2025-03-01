@@ -9,7 +9,7 @@ function Button({ variant = "primary", icon, onClick, children, ...props }) {
 
   return (
     <button
-      className={`flex gap-2 px-3 py-2 text-sm rounded-lg font-medium transition-colors duration-300 ${variantStyles[variant]}`}
+      className={`flex h-10 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-300 ${variantStyles[variant]}`}
       onClick={onClick}
       {...props}
     >
