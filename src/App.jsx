@@ -1,14 +1,24 @@
-import React, { useState } from "react";
-import { Navigate, Outlet } from "react-router";
+import React from "react";
+import { Navigate, Outlet, useLocation } from "react-router"; // Fix import
+import { useAuth } from "./hooks/useAuth";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn } = useAuth();
+  const location = useLocation();
 
-  if (!isLoggedIn) {
-    return <Navigate to="/login" />;
-  }
-
-  return <Outlet />;
+  return (
+    <>
+      {!isLoggedIn ? (
+        <Navigate
+          to="login"
+          replace
+          state={{ from: location }}
+        />
+      ) : (
+        <Outlet />
+      )}
+    </>
+  );
 }
 
 export default App;

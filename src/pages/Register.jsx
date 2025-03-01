@@ -2,9 +2,12 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import logo from "../assets/img/logo.svg";
 import Button from "../components/common/Button";
+import { useAuth } from "../hooks/useAuth";
+import { addUser } from "../utils/user-data";
 
 function Register() {
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -20,8 +23,19 @@ function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Implementasi logika register disini
     console.log("Form submitted:", formData);
+
+    if (formData.password !== formData.confirmPassword) {
+      alert("Password dan konfirmasi password tidak sama");
+      return;
+    }
+
+    addUser({
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+    });
+
     navigate("/login");
   };
 
@@ -36,6 +50,17 @@ function Register() {
           Daftar Akun
         </h2>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <label htmlFor="name" className="text-sm text-slate-500">
+            Nama
+          </label>
+          <input
+            name="name"
+            type="text"
+            required
+            className="w-96 rounded-lg bg-slate-200 px-4 py-2 outline-2 outline-transparent transition-[outline] duration-300 hover:outline-slate-300 focus:outline-[#007afc]"
+            value={formData.name}
+            onChange={handleChange}
+          />
           <label htmlFor="email" className="text-sm text-slate-500">
             Email
           </label>

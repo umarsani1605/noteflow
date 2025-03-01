@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router"; // Fix import
 import logo from "../assets/img/logo.svg";
 import Button from "../components/common/Button";
+import { useAuth } from "../hooks/useAuth"; // Import the custom hook
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -9,6 +10,11 @@ function Login() {
     password: "",
   });
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const { login } = useAuth();
+
+  const from = location.state?.from?.pathname || "/";
 
   const handleChange = (e) => {
     setFormData({
@@ -19,13 +25,13 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Implementasi logika login disini
-    console.log("Form submitted:", formData);
-    navigate("/");
+    console.log(formData);
+    login(formData);
+    navigate(from);
   };
 
   return (
-    <div className="mx-auto flex h-screen w-[750px] flex-col items-center justify-center bg-slate-50">
+    <div className="mx-auto flex h-screen w-[750px] flex-col items-center justify-center">
       <div className="flex flex-col gap-6 rounded-xl bg-white px-12 py-14 shadow">
         <div className="mb-4 flex items-center justify-center gap-2">
           <img src={logo} alt="logo" className="mb-2 h-12 w-auto" />
