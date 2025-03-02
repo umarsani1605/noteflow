@@ -1,20 +1,17 @@
 import { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router"; // Fix import
+import { Link, useNavigate } from "react-router";
 import logo from "../assets/img/logo.svg";
 import Button from "../components/common/Button";
-import { useAuth } from "../hooks/useAuth"; // Import the custom hook
+import { login, putAccessToken } from "../utils/api";
 
 function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const { login } = useAuth();
-
-  const from = location.state?.from?.pathname || "/";
 
   const handleChange = (e) => {
     setFormData({
@@ -23,11 +20,20 @@ function Login() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    login(formData);
-    navigate(from);
+    setError("");
+    setIsLoading(true);
+
+    try {
+      const { accessToken } = await login(formData);
+      putAccessToken(accessToken);
+      navigate("/", { replace: true });
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -40,6 +46,7 @@ function Login() {
         <h2 className="mb-2 text-center text-3xl font-extrabold text-slate-700">
           Masuk Akun
         </h2>
+        {error && <p className="text-center text-sm text-red-500">{error}</p>}
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <label htmlFor="email" className="text-sm text-slate-500">
             Email
@@ -63,7 +70,9 @@ function Login() {
             value={formData.password}
             onChange={handleChange}
           />
-          <Button variant="primary">Masuk</Button>
+          <Button variant="primary" disabled={isLoading}>
+            {isLoading ? "Loading..." : "Masuk"}
+          </Button>
         </form>
         <p className="text-sm text-gray-600">
           Belum punya akun?{" "}

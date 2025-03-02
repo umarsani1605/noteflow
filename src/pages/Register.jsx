@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import logo from "../assets/img/logo.svg";
 import Button from "../components/common/Button";
-import { useAuth } from "../hooks/useAuth";
-import { addUser } from "../utils/user-data";
+import { register } from "../utils/api";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -12,6 +11,10 @@ function Register() {
     password: "",
     confirmPassword: "",
   });
+  const [error, setError] = useState("");
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,22 +24,29 @@ function Register() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    setError("");
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Password dan konfirmasi password tidak sama");
+      setError("Password dan konfirmasi password tidak sama");
       return;
     }
 
-    addUser({
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-    });
+    setIsLoading(true);
 
-    navigate("/login");
+    try {
+      await register({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
+      navigate("/login");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -49,6 +59,7 @@ function Register() {
         <h2 className="mb-2 text-center text-3xl font-extrabold text-slate-700">
           Daftar Akun
         </h2>
+        {error && <p className="text-center text-sm text-red-500">{error}</p>}
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <label htmlFor="name" className="text-sm text-slate-500">
             Nama
@@ -94,7 +105,9 @@ function Register() {
             value={formData.confirmPassword}
             onChange={handleChange}
           />
-          <Button variant="primary">Daftar</Button>
+          <Button variant="primary" disabled={isLoading}>
+            {isLoading ? "Loading..." : "Daftar"}
+          </Button>
         </form>
         <p className="text-sm text-gray-600">
           Sudah punya akun?{" "}
