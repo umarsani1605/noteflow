@@ -1,14 +1,19 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router";
+
+import LanguageContext from "../contexts/LanguageContext";
 
 import { showFormattedDate } from "../utils";
 
-import ArchiveIcon from "../assets/icons/archive-arrow-down.svg";
-import UnarchiveIcon from "../assets/icons/archive-x-mark.svg";
-import Trash from "../assets/icons/trash.svg";
+import {
+  TrashIcon,
+  ArchiveBoxArrowDownIcon,
+  ArchiveBoxXMarkIcon,
+} from "@heroicons/react/24/outline";
 
 function NoteItem({ note, onDelete, onArchive }) {
+  const { language } = useContext(LanguageContext);
   const handleDelete = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -24,32 +29,32 @@ function NoteItem({ note, onDelete, onArchive }) {
   return (
     <Link
       to={`/note/${note.id}`}
-      className="group flex flex-col justify-between cursor-pointer bg-white p-4 rounded-lg hover:outline-[#007DFC] outline outline-slate-200 overflow-hidden"
+      className="group flex cursor-pointer flex-col justify-between overflow-hidden rounded-lg bg-white p-4 outline outline-slate-200 hover:outline-[#007DFC] dark:bg-slate-800 dark:outline-slate-700"
     >
-      <div className="space-y-2 text-sm text-slate-700">
+      <div className="space-y-2 text-sm">
         <h1 className="font-bold">{note.title}</h1>
-        <p className="font-normal mt-2">{note.body}</p>
+        <p className="mt-2 font-normal">{note.body}</p>
       </div>
-      <div className="flex justify-between items-center mt-4">
-        <p className="font-normal text-xs text-slate-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          {showFormattedDate(note.createdAt)}
+      <div className="mt-4 flex items-center justify-between">
+        <p className="text-xs font-normal text-slate-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          {showFormattedDate(note.createdAt, language)}
         </p>
         <div className="flex">
           <button
-            className="group-hover:opacity-100 opacity-0 transition-opacity duration-300 rounded-lg p-2 hover:bg-blue-50 cursor-pointer"
+            className="cursor-pointer rounded-lg p-2 opacity-0 transition-opacity duration-300 hover:bg-blue-50 group-hover:opacity-100"
             onClick={handleDelete}
           >
-            <img src={Trash} alt="delete-icon" className="w-4" />
+            <TrashIcon className="w-4" />
           </button>
           <button
-            className="group-hover:opacity-100 opacity-0 transition-opacity duration-300 rounded-lg p-2 hover:bg-blue-50 cursor-pointer"
+            className="cursor-pointer rounded-lg p-2 opacity-0 transition-opacity duration-300 hover:bg-blue-50 group-hover:opacity-100"
             onClick={handleArchive}
           >
-            <img
-              src={note.archived ? UnarchiveIcon : ArchiveIcon}
-              alt="archive-icon"
-              className="w-4"
-            />
+            {note.archived ? (
+              <ArchiveBoxXMarkIcon className="w-4" />
+            ) : (
+              <ArchiveBoxArrowDownIcon className="w-4" />
+            )}
           </button>
         </div>
       </div>

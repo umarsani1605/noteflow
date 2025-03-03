@@ -1,21 +1,31 @@
 import PropTypes from "prop-types";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router";
 import { getUserLogged, putAccessToken } from "../../utils/api";
+
+import ThemeContext from "../../contexts/ThemeContext";
+import LanguageContext from "../../contexts/LanguageContext";
 
 import Avatar from "../../assets/img/avatar.jpg";
 import Logo from "../../assets/img/logo.svg";
 import SearchBar from "./SearchBar";
-import { useTheme } from "../../contexts/ThemeContext";
-import { useLanguage } from "../../contexts/LanguageContext";
-import MoonIcon from "../../assets/icons/moon.svg";
-import SunIcon from "../../assets/icons/sun.svg";
+
+import {
+  SunIcon,
+  MoonIcon,
+  ArrowLeftStartOnRectangleIcon,
+} from "@heroicons/react/24/outline";
+
+import IdFlag from "../../assets/icons/id_flag.svg";
+import GbFlag from "../../assets/icons/gb_flag.svg";
 
 function Header({ onSearch, showSearchBar = true }) {
   const [user, setUser] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { isDarkMode, toggleTheme } = useTheme();
-  const { language, toggleLanguage, t } = useLanguage();
+
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { language, toggleLanguage, translate } = useContext(LanguageContext);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,19 +62,24 @@ function Header({ onSearch, showSearchBar = true }) {
         <div className="relative flex items-center space-x-4">
           <button
             onClick={toggleLanguage}
-            className="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700"
-          >
-            {language === "id" ? "EN" : "ID"}
-          </button>
-          <button
-            onClick={toggleTheme}
-            className="rounded-lg p-2 hover:bg-slate-100 dark:hover:bg-slate-700"
+            className="flex gap-2 rounded-lg border border-slate-200/75 px-3 py-2 text-sm font-medium text-slate-800 hover:bg-slate-100 dark:border-slate-700 dark:text-white dark:hover:bg-slate-700"
           >
             <img
-              src={isDarkMode ? SunIcon : MoonIcon}
+              src={language == "id" ? IdFlag : GbFlag}
               alt="theme-toggle"
               className="h-5 w-5 dark:text-white"
             />
+            {language === "id" ? "ID" : "EN"}
+          </button>
+          <button
+            onClick={toggleTheme}
+            className="rounded-lg border border-slate-200/75 p-2 hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-700"
+          >
+            {theme === "dark" ? (
+              <MoonIcon className="h-5 w-5 dark:text-white" />
+            ) : (
+              <SunIcon className="h-5 w-5 dark:text-white" />
+            )}
           </button>
           <img
             src={Avatar}
@@ -73,22 +88,23 @@ function Header({ onSearch, showSearchBar = true }) {
             onClick={toggleDropdown}
           />
           {isDropdownOpen && (
-            <ul className="absolute right-0 top-12 flex flex-col gap-2 rounded-lg border border-slate-200 bg-white p-4 shadow-md dark:border-slate-700 dark:bg-slate-800">
-              <li className="text-sm font-bold text-slate-700 dark:text-white">
-                {user?.name}
-              </li>
-              <li className="text-xs text-slate-500 dark:text-slate-400">
-                {user?.email}
-              </li>
-              <li>
-                <button
-                  onClick={handleLogout}
-                  className="text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white"
-                >
-                  {t("logout")}
-                </button>
-              </li>
-            </ul>
+            <div className="absolute right-0 top-12 flex flex-col gap-2 rounded-lg border border-slate-200 bg-white p-4 shadow-md dark:border-slate-700 dark:bg-slate-800">
+              <div className="flex flex-col border-b border-slate-200 pb-4">
+                <div className="font-bold text-slate-700 dark:text-white">
+                  {user?.name}
+                </div>
+                <div className="text-sm text-slate-500 dark:text-slate-400">
+                  {user?.email}
+                </div>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="flex items-center pt-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white"
+              >
+                <ArrowLeftStartOnRectangleIcon className="mr-2 h-5 w-5 rotate-180" />
+                {translate("logout")}
+              </button>
+            </div>
           )}
         </div>
       </div>

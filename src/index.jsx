@@ -19,14 +19,15 @@ import Login from "./pages/Login";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route errorElement={<NotFound />}>
-      <Route path="/" element={<App />} >
+      <Route path="/" element={<App />}>
         <Route index element={<Home />} />
         <Route path="note/:id" element={<NoteDetails />} />
         <Route path="archive" element={<Archive />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-    </Route>
+      <Route path="/404" element={<NotFound />} />
+    </Route>,
   ),
 );
 

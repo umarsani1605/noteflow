@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router";
 
-import ArchiveIcon from "../assets/icons/archive-arrow-down.svg";
-import UnarchiveIcon from "../assets/icons/archive-x-mark.svg";
-import ArrowLeftIcon from "../assets/icons/arrow-left.svg";
-import TrashIcon from "../assets/icons/trash.svg";
+import LanguageContext from "../contexts/LanguageContext";
+
+import {
+  TrashIcon,
+  ArchiveBoxArrowDownIcon,
+  ArchiveBoxXMarkIcon,
+  ArrowLeftIcon,
+} from "@heroicons/react/24/outline";
+
 import { showFormattedDate } from "../utils";
 import { archiveNote, deleteNote, getNote, unarchiveNote } from "../utils/api";
 
 import Button from "../components/common/Button";
 import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
+import Loading from "../components/common/Loading";
 
 function NoteDetails() {
   const { id } = useParams();
@@ -18,21 +24,23 @@ function NoteDetails() {
   const [note, setNote] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchNote = async () => {
-      try {
-        const { data } = await getNote(id);
-        setNote(data);
-      } catch (error) {
-        console.error("Error fetching note:", error);
-        navigate("/404");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const { translate, language } = useContext(LanguageContext);
 
+  useEffect(() => {
     fetchNote();
   }, [id, navigate]);
+
+  const fetchNote = async () => {
+    try {
+      const { data } = await getNote(id);
+      setNote(data);
+    } catch (error) {
+      console.error("Error fetching note:", error);
+      navigate("/404");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleBackButton = () => {
     navigate(-1);
@@ -61,7 +69,7 @@ function NoteDetails() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (!note) {
@@ -69,7 +77,7 @@ function NoteDetails() {
   }
 
   return (
-    <div className="flex h-screen flex-col justify-between bg-slate-50">
+    <div className="flex h-screen flex-col justify-between">
       <Header showSearchBar={false} />
       <div className="mx-auto flex w-[1080px] flex-1 flex-col gap-2 p-4 pb-8">
         <div className="flex items-center justify-between">
@@ -78,29 +86,31 @@ function NoteDetails() {
             icon={ArrowLeftIcon}
             onClick={handleBackButton}
           >
-            Kembali
+            {translate("back")}
           </Button>
           <div className="flex gap-1">
             <Button variant="secondary" icon={TrashIcon} onClick={handleDelete}>
-              Hapus
+              {translate("delete")}
             </Button>
             <Button
               variant="secondary"
-              icon={note.archived ? UnarchiveIcon : ArchiveIcon}
+              icon={
+                note.archived ? ArchiveBoxXMarkIcon : ArchiveBoxArrowDownIcon
+              }
               onClick={handleArchiveToggle}
             >
-              {note.archived ? "Batal Arsipkan" : "Arsipkan"}
+              {note.archived ? translate("unarchive") : translate("archive")}
             </Button>
           </div>
         </div>
-        <div className="flex flex-1 flex-col justify-between rounded-lg border border-slate-200 bg-white p-8">
+        <div className="flex flex-1 flex-col justify-between rounded-lg border border-slate-200 bg-white p-8 dark:border-slate-700 dark:bg-slate-800">
           <div className="flex h-full flex-col pb-2">
-            <h1 className="border-b border-slate-200 pb-4 text-3xl font-medium">
+            <h1 className="border-b border-slate-200 pb-4 text-3xl font-medium dark:border-slate-700">
               {note.title}
             </h1>
-            <p className="cursor-default pb-6 pt-2 text-sm font-normal text-slate-500">
-              {showFormattedDate(note.createdAt)}{" "}
-              {note.archived ? " • Pesan dalam arsip" : ""}
+            <p className="cursor-default pb-6 pt-2 text-sm font-normal text-slate-400">
+              {showFormattedDate(note.createdAt, language)}{" "}
+              {note.archived ? " • " + translate("inArchive") : ""}
             </p>
             <p className="font-normal">{note.body}</p>
           </div>

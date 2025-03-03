@@ -1,8 +1,12 @@
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+
+import LanguageContext from "../contexts/LanguageContext";
+
+import Button from "./common/Button";
+
 import CloseIcon from "../assets/icons/close.svg";
 import PencilIcon from "../assets/icons/pencil-subtle.svg";
-import Button from "./common/Button";
 
 function NoteForm({ onAddNote }) {
   const TITLE_CHAR_LIMIT = 50;
@@ -12,6 +16,8 @@ function NoteForm({ onAddNote }) {
     title: "",
     body: "",
   });
+
+  const { translate } = useContext(LanguageContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,20 +61,22 @@ function NoteForm({ onAddNote }) {
 
   return (
     <>
-      <div className="bg-white p-4 mb-4 rounded-lg outline outline-slate-200 hover:outline-slate-300  transition-[outline] duration-300">
+      <div className="mb-4 rounded-lg bg-white p-4 outline outline-slate-200 hover:outline-slate-300 dark:bg-slate-800 dark:outline-slate-700">
         <form className="flex flex-col" onSubmit={handleSubmit}>
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <input
               type="text"
-              placeholder={isExpanded ? "Judul catatan" : "Tulis catatan..."}
+              placeholder={
+                isExpanded ? translate("noteTitle") : translate("writeNote")
+              }
               name="title"
-              className="font-medium text-md text-slate-600 focus:outline-none w-full"
+              className="text-md w-full bg-inherit font-medium text-slate-600 focus:outline-none"
               value={note.title}
               onChange={handleChange}
               onFocus={handleOpen}
             />
             {isExpanded && (
-              <span className="text-xs text-slate-500 mr-4">{`${remainingTitleChars}/${TITLE_CHAR_LIMIT}`}</span>
+              <span className="mr-4 text-xs text-slate-500">{`${remainingTitleChars}/${TITLE_CHAR_LIMIT}`}</span>
             )}
             <img
               src={isExpanded ? CloseIcon : PencilIcon}
@@ -81,22 +89,22 @@ function NoteForm({ onAddNote }) {
           <div
             className={`space-y-4 transition-all duration-300 ${
               isExpanded
-                ? "opacity-100 h-auto"
-                : "opacity-0 h-0 overflow-hidden"
+                ? "h-auto opacity-100"
+                : "h-0 overflow-hidden opacity-0"
             }`}
           >
             <textarea
               id="body"
-              placeholder="Tulis catatan..."
+              placeholder={translate("writeNote")}
               name="body"
-              className="font-normal text-sm text-slate-600 focus:outline-none w-full pt-4"
+              className="w-full bg-inherit pt-4 text-sm font-normal text-slate-600 focus:outline-none"
               value={note.body}
               onChange={handleChange}
               rows={4}
             ></textarea>
-            <div className="flex justify-start gap-4 border-t border-slate-200 pt-4">
+            <div className="flex justify-start gap-4 border-t border-slate-200 pt-4 dark:border-slate-700">
               <Button type="submit" variant="primary">
-                Simpan
+                {translate("save")}
               </Button>
             </div>
           </div>

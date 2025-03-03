@@ -9,7 +9,12 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   background-color: #f1f5f9;
   color: #334155;
+}
+
+.dark body {
+  background-color: #334155;
+  color: #e2e8f0;
 }
